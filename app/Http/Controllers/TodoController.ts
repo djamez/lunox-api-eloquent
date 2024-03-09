@@ -1,5 +1,4 @@
 import { Controller, Request } from "@lunoxjs/core";
-import { DB } from "@lunoxjs/eloquent";
 import Todo from "app/Model/Todo";
 
 class TodoController extends Controller {
@@ -9,23 +8,36 @@ class TodoController extends Controller {
     return await Todo.query();
   }
 
-  async findOne(req: Request){    
-    const id = req.get("id");
-    console.log(req.input("id"));
-    
-    console.log(id);
-    
+  async findOne(req: Request, id:number){    
     return await Todo.query().where({id}).first();
   }
 
-  async save(req:Request) {
-    console.log("save");
-    return '{action: "save"}';
+  async save(req:Request) {    
+    /* const _input = req.all();
+    delete _input["id"]; */
+    const validated = await req.validate(Todo.rules);
+    return await Todo.query().insertAndFetch(validated);
   }
 
-  async update(req:Request) {
-    console.log("update");
-    return '{action: "update"}';
+  async update(req:Request, id:number) {
+    const validated = await req.validate(Todo.rules);
+    return await Todo.query().patchAndFetchById(id, validated).where({id})
+  }
+
+  async delete(req:Request, id:number) {
+    return await Todo.query().delete().where({id})
+  }
+
+  async markCompleted(req:Request, id:number, isCompleted = true){
+    return await Todo.query().patchAndFetchById(id, {is_completed: isCompleted}).where({id})
+  }
+
+  async toggleCompleted(req:Request, id:number){
+    return await Todo.query().patchAndFetchById(id, {is_completed: Todo.raw("not is_completed")}).where({id})
+  }
+
+  async toggleStarred(req:Request, id:number){
+    return await Todo.query().patchAndFetchById(id, {is_starred: Todo.raw("not is_starred")}).where({id})
   }
 }
 

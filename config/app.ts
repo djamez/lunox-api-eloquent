@@ -4,6 +4,7 @@ import RouteServiceProvider from "app/Providers/RouteServiceProvider";
 import { DatabaseServiceProvider } from "@lunoxjs/eloquent";
 import { FilesystemServiceProvider } from "@lunoxjs/filesystem";
 import { EncryptionServiceProvider } from "@lunoxjs/core";
+import { ValidationServiceProvider } from "@lunoxjs/validation"
 import type { AppConfig } from "@lunoxjs/core/contracts";
 
 const app: AppConfig = {
@@ -21,6 +22,8 @@ const app: AppConfig = {
     AppServiceProvider,
     ExceptionServiceProvider,
     RouteServiceProvider,
+
+    ValidationServiceProvider
   ],
 };
 export default app;

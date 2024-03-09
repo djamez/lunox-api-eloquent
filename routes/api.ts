@@ -16,7 +16,12 @@ Route.prefix("/api").group(() => {
   Route.get("/todo/:id", [TodoController, "findOne"]);
   Route.get("/todo", [TodoController, "index"]);
   Route.post("/todo", [TodoController, "save"]);
-  Route.post("/todo/:id", [TodoController, "update"]);
+  Route.patch("/todo/:id", [TodoController, "update"]);
+  Route.delete("/todo/:id", [TodoController, "delete"]);
+
+  Route.post("/todo/:id/completed", [TodoController, "markCompleted"]);
+  Route.post("/todo/:id/completed/toggle", [TodoController, "toggleCompleted"]);
+  Route.post("/todo/:id/starred/toggle", [TodoController, "toggleStarred"]);
 
   Route.get("/users", async () => {
     const users = await User.query();
