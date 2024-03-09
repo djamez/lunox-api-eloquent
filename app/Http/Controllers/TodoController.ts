@@ -10,8 +10,11 @@ class TodoController extends Controller {
   }
 
   async findOne(req: Request){    
-    console.log("find");
     const id = req.get("id");
+    console.log(req.input("id"));
+    
+    console.log(id);
+    
     return await Todo.query().where({id}).first();
   }
 
