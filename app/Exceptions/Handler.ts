@@ -1,15 +1,23 @@
 import ApiException from "./ApiException";
 import { Handler as ExceptionHandler, HttpException } from "@lunoxjs/core";
 import { Response } from "@lunoxjs/core/facades";
+import { ValidationException } from "@lunoxjs/validation";
 
 class Handler extends ExceptionHandler {
-  protected dontReport = [];
+  protected dontReport = [ValidationException];
 
   register() {
     this.reportable(ApiException, (e) => {
       if (e.status >= 500) {
         console.log("API Error", e);
       }
+    });
+
+    this.renderable(ValidationException, (e)=>{
+      return Response.make({
+        message: e.message,
+        errors: e.errors()
+      }, e.status);
     });
 
     this.renderable(ApiException, (e) => {
